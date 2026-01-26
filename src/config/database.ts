@@ -32,10 +32,17 @@ export const initializeDatabase = async (): Promise<void> => {
         console.log(
           "📊 Running in development mode - database synchronization enabled",
         );
+      } else if (config.env === "production") {
+        console.log(
+          "📊 Running in production mode - running database migrations",
+        );
+        await AppDataSource.runMigrations();
+        console.log("✅ Database migrations completed successfully");
       }
       return;
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : String(error);
+      const errorMessage =
+        error instanceof Error ? error.message : String(error);
       console.error(
         `❌ Database connection attempt ${attempt} failed:`,
         errorMessage,
