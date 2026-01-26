@@ -5,7 +5,10 @@ dotenv.config();
 // Parse DATABASE_URL (PostgreSQL connection string from Render)
 const parseDatabaseUrl = () => {
   const dbUrl = process.env.DATABASE_URL;
+  console.log("🔍 DATABASE_URL:", dbUrl ? "Present" : "Not set");
+
   if (!dbUrl) {
+    console.log("⚠️  No DATABASE_URL found, using individual env vars");
     return {
       host: process.env.DB_HOST || "localhost",
       port: parseInt(process.env.DB_PORT || "5432", 10),
@@ -17,15 +20,23 @@ const parseDatabaseUrl = () => {
 
   try {
     const url = new URL(dbUrl);
-    return {
+    const parsed = {
       host: url.hostname,
       port: parseInt(url.port || "5432", 10),
       username: url.username,
       password: url.password,
       name: url.pathname.replace("/", ""),
     };
+    console.log("✅ Parsed DATABASE_URL:", {
+      host: parsed.host,
+      port: parsed.port,
+      username: parsed.username ? "Present" : "Not set",
+      password: parsed.password ? "Present" : "Not set",
+      name: parsed.name,
+    });
+    return parsed;
   } catch (e) {
-    console.error("Invalid DATABASE_URL format", e);
+    console.error("❌ Invalid DATABASE_URL format:", e.message);
     return {
       host: process.env.DB_HOST || "localhost",
       port: parseInt(process.env.DB_PORT || "5432", 10),
@@ -106,10 +117,7 @@ export const config = {
 
 // Validate required environment variables in production
 if (config.env === "production") {
-  const requiredEnvVars = [
-    "JWT_SECRET",
-    "DB_PASSWORD",
-  ];
+  const requiredEnvVars = ["JWT_SECRET", "DB_PASSWORD"];
 
   const missingEnvVars = requiredEnvVars.filter(
     (envVar) => !process.env[envVar],
