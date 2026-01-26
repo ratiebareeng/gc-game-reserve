@@ -16,6 +16,30 @@ services:
         fromDatabase:
           name: gaborone-reserve-db
           property: connectionString
+      - key: JWT_SECRET
+        sync: false
+      - key: ALLOWED_ORIGINS
+        value: https://gaboronereserve.bw,https://app.gaboronereserve.bw
+      - key: APP_NAME
+        value: Gaborone Game Reserve
+      - key: APP_URL
+        value: https://gaboronereserve.bw
+      - key: FRONTEND_URL
+        value: https://app.gaboronereserve.bw
+      - key: SMTP_HOST
+        value: smtp.gmail.com
+      - key: SMTP_PORT
+        value: 587
+      - key: SMTP_SECURE
+        value: true
+      - key: AWS_REGION
+        value: af-south-1
+      - key: AWS_S3_BUCKET
+        value: gaborone-reserve-media
+      - key: RATE_LIMIT_WINDOW_MS
+        value: 900000
+      - key: RATE_LIMIT_MAX_REQUESTS
+        value: 100
 
 databases:
   - name: gaborone-reserve-db
