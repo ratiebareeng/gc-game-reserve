@@ -1,4 +1,5 @@
 import { DataSource } from "typeorm";
+import { seedDatabase } from "../database/seeders/seed";
 import { config } from "./environment";
 
 export const AppDataSource = new DataSource({
@@ -38,6 +39,10 @@ export const initializeDatabase = async (): Promise<void> => {
         );
         await AppDataSource.runMigrations();
         console.log("✅ Database migrations completed successfully");
+
+        console.log("🌱 Seeding database with initial data...");
+        await seedDatabase();
+        console.log("✅ Database seeding completed successfully");
       }
       return;
     } catch (error) {

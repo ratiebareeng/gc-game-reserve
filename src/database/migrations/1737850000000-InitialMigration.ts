@@ -1,7 +1,8 @@
 import { MigrationInterface, QueryRunner } from "typeorm";
 
 export class InitialMigration1737850000000 implements MigrationInterface {
-  public async up(queryRunner: QueryRunner): Promise<void> {
+
+    public async up(queryRunner: QueryRunner): Promise<void> {
     // Enable UUID extension
     await queryRunner.query(`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`);
 
@@ -47,35 +48,37 @@ export class InitialMigration1737850000000 implements MigrationInterface {
     // Create animals table
     await queryRunner.query(`
             CREATE TABLE "animals" (
-                "id" uuid NOT NULL DEFAULT uuid_generate_v4(),
-                "common_name" character varying(255) NOT NULL,
-                "scientific_name" character varying(255),
+                "id" SERIAL NOT NULL,
+                "common_name" character varying(100) NOT NULL,
+                "scientific_name" character varying(150),
                 "category" character varying NOT NULL,
-                "description" text,
-                "conservation_status" character varying,
-                "diet_type" character varying,
+                "description" text NOT NULL,
                 "habitat" text,
-                "population_estimate" integer,
-                "is_endangered" boolean NOT NULL DEFAULT false,
-                "created_at" TIMESTAMP NOT NULL DEFAULT now(),
-                "updated_at" TIMESTAMP NOT NULL DEFAULT now(),
-                CONSTRAINT "PK_56d48e3d7c8e0a2b8e0b8c8e0" PRIMARY KEY ("id")
+                "diet" character varying,
+                "conservation_status" character varying,
+                "interesting_facts" text[],
+                "average_lifespan" character varying(50),
+                "average_weight" character varying(50),
+                "is_featured" boolean NOT NULL DEFAULT false,
+                "display_order" integer,
             )
         `);
 
     // Create points_of_interest table
     await queryRunner.query(`
             CREATE TABLE "points_of_interest" (
-                "id" uuid NOT NULL DEFAULT uuid_generate_v4(),
-                "name" character varying(255) NOT NULL,
-                "description" text,
+                "id" SERIAL NOT NULL,
+                "name" character varying(200) NOT NULL,
                 "type" character varying NOT NULL,
+                "description" text,
                 "latitude" numeric(10,8) NOT NULL,
                 "longitude" numeric(11,8) NOT NULL,
+                "facilities" text[],
+                "best_time_to_visit" character varying(100),
+                "accessibility_notes" text,
+                "common_animals" integer[],
                 "is_active" boolean NOT NULL DEFAULT true,
-                "created_at" TIMESTAMP NOT NULL DEFAULT now(),
-                "updated_at" TIMESTAMP NOT NULL DEFAULT now(),
-                CONSTRAINT "PK_4c88e956195bba85977da21b8f" PRIMARY KEY ("id")
+                "display_order" integer,
             )
         `);
 
@@ -129,14 +132,15 @@ export class InitialMigration1737850000000 implements MigrationInterface {
     // Create animal_media table
     await queryRunner.query(`
             CREATE TABLE "animal_media" (
-                "id" uuid NOT NULL DEFAULT uuid_generate_v4(),
-                "animal_id" uuid NOT NULL,
+                "id" SERIAL NOT NULL,
+                "animal_id" integer NOT NULL,
                 "media_type" character varying NOT NULL,
                 "url" character varying(500) NOT NULL,
+                "thumbnail_url" character varying(500),
                 "caption" text,
                 "is_primary" boolean NOT NULL DEFAULT false,
+                "display_order" integer,
                 "created_at" TIMESTAMP NOT NULL DEFAULT now(),
-                "updated_at" TIMESTAMP NOT NULL DEFAULT now(),
                 CONSTRAINT "PK_4c88e956195bba85977da21b8fb" PRIMARY KEY ("id")
             )
         `);
@@ -144,14 +148,15 @@ export class InitialMigration1737850000000 implements MigrationInterface {
     // Create poi_media table
     await queryRunner.query(`
             CREATE TABLE "poi_media" (
-                "id" uuid NOT NULL DEFAULT uuid_generate_v4(),
-                "poi_id" uuid NOT NULL,
+                "id" SERIAL NOT NULL,
+                "poi_id" integer NOT NULL,
                 "media_type" character varying NOT NULL,
                 "url" character varying(500) NOT NULL,
+                "thumbnail_url" character varying(500),
                 "caption" text,
                 "is_primary" boolean NOT NULL DEFAULT false,
+                "display_order" integer,
                 "created_at" TIMESTAMP NOT NULL DEFAULT now(),
-                "updated_at" TIMESTAMP NOT NULL DEFAULT now(),
                 CONSTRAINT "PK_4c88e956195bba85977da21b8fc" PRIMARY KEY ("id")
             )
         `);
