@@ -35,9 +35,10 @@ export const initializeDatabase = async (): Promise<void> => {
       }
       return;
     } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : String(error);
       console.error(
         `❌ Database connection attempt ${attempt} failed:`,
-        error.message,
+        errorMessage,
       );
 
       if (attempt === maxRetries) {

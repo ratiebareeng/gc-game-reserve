@@ -36,7 +36,8 @@ const parseDatabaseUrl = () => {
     });
     return parsed;
   } catch (e) {
-    console.error("❌ Invalid DATABASE_URL format:", e.message);
+    const errorMessage = e instanceof Error ? e.message : String(e);
+    console.error("❌ Invalid DATABASE_URL format:", errorMessage);
     return {
       host: process.env.DB_HOST || "localhost",
       port: parseInt(process.env.DB_PORT || "5432", 10),
