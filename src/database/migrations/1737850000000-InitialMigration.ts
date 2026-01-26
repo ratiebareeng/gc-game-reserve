@@ -1,8 +1,7 @@
 import { MigrationInterface, QueryRunner } from "typeorm";
 
 export class InitialMigration1737850000000 implements MigrationInterface {
-
-    public async up(queryRunner: QueryRunner): Promise<void> {
+  public async up(queryRunner: QueryRunner): Promise<void> {
     // Enable UUID extension
     await queryRunner.query(`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`);
 
@@ -61,6 +60,9 @@ export class InitialMigration1737850000000 implements MigrationInterface {
                 "average_weight" character varying(50),
                 "is_featured" boolean NOT NULL DEFAULT false,
                 "display_order" integer,
+                "created_at" TIMESTAMP NOT NULL DEFAULT now(),
+                "updated_at" TIMESTAMP NOT NULL DEFAULT now(),
+                CONSTRAINT "PK_56d48e3d7c8e0a2b8e0b8c8e0" PRIMARY KEY ("id")
             )
         `);
 
@@ -79,6 +81,9 @@ export class InitialMigration1737850000000 implements MigrationInterface {
                 "common_animals" integer[],
                 "is_active" boolean NOT NULL DEFAULT true,
                 "display_order" integer,
+                "created_at" TIMESTAMP NOT NULL DEFAULT now(),
+                "updated_at" TIMESTAMP NOT NULL DEFAULT now(),
+                CONSTRAINT "PK_4c88e956195bba85977da21b8f" PRIMARY KEY ("id")
             )
         `);
 
