@@ -109,8 +109,6 @@ if (config.env === "production") {
   const requiredEnvVars = [
     "JWT_SECRET",
     "DB_PASSWORD",
-    "SMTP_USER",
-    "SMTP_PASSWORD",
   ];
 
   const missingEnvVars = requiredEnvVars.filter(
