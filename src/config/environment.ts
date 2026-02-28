@@ -118,11 +118,15 @@ export const config = {
 
 // Validate required environment variables in production
 if (config.env === "production") {
-  const requiredEnvVars = ["JWT_SECRET", "DB_PASSWORD"];
+  const requiredEnvVars = ["JWT_SECRET"];
 
   const missingEnvVars = requiredEnvVars.filter(
     (envVar) => !process.env[envVar],
   );
+
+  if (!process.env.DATABASE_URL && !process.env.DB_PASSWORD) {
+    missingEnvVars.push("DATABASE_URL or DB_PASSWORD");
+  }
 
   if (missingEnvVars.length > 0) {
     console.error(

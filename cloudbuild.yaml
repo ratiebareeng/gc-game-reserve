@@ -1,0 +1,35 @@
+steps:
+  # Build Docker image
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'build'
+      - '-t'
+      - 'africa-south1-docker.pkg.dev/$PROJECT_ID/gaborone-reserve/api:$COMMIT_SHA'
+      - '-t'
+      - 'africa-south1-docker.pkg.dev/$PROJECT_ID/gaborone-reserve/api:latest'
+      - '.'
+
+  # Push to Artifact Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'push'
+      - '--all-tags'
+      - 'africa-south1-docker.pkg.dev/$PROJECT_ID/gaborone-reserve/api'
+
+  # Deploy to Cloud Run
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: 'gcloud'
+    args:
+      - 'run'
+      - 'deploy'
+      - 'gaborone-reserve-api'
+      - '--image'
+      - 'africa-south1-docker.pkg.dev/$PROJECT_ID/gaborone-reserve/api:$COMMIT_SHA'
+      - '--region'
+      - 'africa-south1'
+      - '--platform'
+      - 'managed'
+      - '--allow-unauthenticated'
+
+images:
+  - 'africa-south1-docker.pkg.dev/$PROJECT_ID/gaborone-reserve/api'

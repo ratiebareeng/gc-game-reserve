@@ -31,8 +31,8 @@ export const seedPOIs = async () => {
       type: POIType.PICNIC_AREA,
       description:
         "Shaded picnic area with braai facilities. Perfect for family outings.",
-      latitude: -24.6415988,
-      longitude: 25.9520771,
+      latitude: -24.6396173,
+      longitude: 25.9599146,
       facilities: [
         "Parking",
         "Restrooms",
@@ -65,8 +65,8 @@ export const seedPOIs = async () => {
       type: POIType.PICNIC_AREA,
       description:
         "Shaded picnic area with braai facilities. Perfect for family outings.",
-      latitude: -24.642,
-      longitude: 25.954,
+      latitude: -24.6383396,
+      longitude: 25.9584083,
       facilities: [
         "Parking",
         "Restrooms",
