@@ -5,10 +5,10 @@ dotenv.config();
 // Parse DATABASE_URL (PostgreSQL connection string from Render)
 const parseDatabaseUrl = () => {
   const dbUrl = process.env.DATABASE_URL;
-  console.log("🔍 DATABASE_URL:", dbUrl ? "Present" : "Not set");
+  console.log("DATABASE_URL:", dbUrl ? "Present" : "Not set");
 
   if (!dbUrl) {
-    console.log("⚠️  No DATABASE_URL found, using individual env vars");
+    console.log("No DATABASE_URL found, using individual env vars");
     return {
       host: process.env.DB_HOST || "localhost",
       port: parseInt(process.env.DB_PORT || "5432", 10),
@@ -27,7 +27,7 @@ const parseDatabaseUrl = () => {
       password: url.password,
       name: url.pathname.replace("/", ""),
     };
-    console.log("✅ Parsed DATABASE_URL:", {
+    console.log("Parsed DATABASE_URL:", {
       host: parsed.host,
       port: parsed.port,
       username: parsed.username ? "Present" : "Not set",
@@ -37,7 +37,7 @@ const parseDatabaseUrl = () => {
     return parsed;
   } catch (e) {
     const errorMessage = e instanceof Error ? e.message : String(e);
-    console.error("❌ Invalid DATABASE_URL format:", errorMessage);
+    console.error("Invalid DATABASE_URL format:", errorMessage);
     return {
       host: process.env.DB_HOST || "localhost",
       port: parseInt(process.env.DB_PORT || "5432", 10),
@@ -130,7 +130,7 @@ if (config.env === "production") {
 
   if (missingEnvVars.length > 0) {
     console.error(
-      "❌ Missing required environment variables:",
+      "Missing required environment variables:",
       missingEnvVars.join(", "),
     );
     process.exit(1);

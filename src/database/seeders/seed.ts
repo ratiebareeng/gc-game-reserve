@@ -13,7 +13,7 @@ import { PointOfInterest } from "../entities/poi.entity";
 const seedDatabase = async () => {
   try {
     // Assume database is already initialized
-    console.log("🌱 Starting database seeding...");
+    console.log("Starting database seeding...");
 
     // Seed Activity Types
     const activityTypeRepo = AppDataSource.getRepository(ActivityType);
@@ -38,7 +38,7 @@ const seedDatabase = async () => {
       ];
 
       await activityTypeRepo.save(activityTypes);
-      console.log("✅ Activity types seeded");
+      console.log("Activity types seeded");
     }
 
     // Seed Animals
@@ -130,7 +130,7 @@ const seedDatabase = async () => {
       ];
 
       await animalRepo.save(animals);
-      console.log("✅ Animals seeded");
+      console.log("Animals seeded");
     }
 
     // Seed Points of Interest
@@ -222,12 +222,12 @@ const seedDatabase = async () => {
       ];
 
       await poiRepo.save(pois);
-      console.log("✅ Points of Interest seeded");
+      console.log("Points of Interest seeded");
     }
 
-    console.log("✅ Database seeding completed successfully");
+    console.log("Database seeding completed successfully");
   } catch (error) {
-    console.error("❌ Error seeding database:", error);
+    console.error("Error seeding database:", error);
     throw error; // Throw instead of exit for use in other contexts
   }
 };

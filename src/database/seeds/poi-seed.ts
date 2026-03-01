@@ -202,5 +202,5 @@ export const seedPOIs = async () => {
   });
 
   await poiRepository.save(pois);
-  console.log(`✅ Seeded ${pois.length} POIs successfully`);
+  console.log(`Seeded ${pois.length} POIs successfully`);
 };

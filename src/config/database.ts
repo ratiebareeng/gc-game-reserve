@@ -24,41 +24,53 @@ export const initializeDatabase = async (): Promise<void> => {
   for (let attempt = 1; attempt <= maxRetries; attempt++) {
     try {
       console.log(
-        `🔄 Attempting database connection (attempt ${attempt}/${maxRetries})...`,
+        `Attempting database connection (attempt ${attempt}/${maxRetries})...`,
       );
-      await AppDataSource.initialize();
-      console.log("✅ Database connection established successfully");
+
+      if (!AppDataSource.isInitialized) {
+        await AppDataSource.initialize();
+      }
+      console.log("Database connection established successfully");
 
       if (config.env === "development") {
         console.log(
-          "📊 Running in development mode - database synchronization enabled",
+          "Running in development mode - database synchronization enabled",
         );
       } else if (config.env === "production") {
         console.log(
-          "📊 Running in production mode - running database migrations",
+          "Running in production mode - running database migrations",
         );
         await AppDataSource.runMigrations();
-        console.log("✅ Database migrations completed successfully");
+        console.log("Database migrations completed successfully");
 
-        console.log("🌱 Seeding database with initial data...");
+        console.log("Seeding database with initial data...");
         await seedDatabase();
-        console.log("✅ Database seeding completed successfully");
+        console.log("Database seeding completed successfully");
       }
       return;
     } catch (error) {
       const errorMessage =
         error instanceof Error ? error.message : String(error);
       console.error(
-        `❌ Database connection attempt ${attempt} failed:`,
+        `Database connection attempt ${attempt} failed:`,
         errorMessage,
       );
 
+      // Destroy the connection before retrying to avoid "already established" errors
+      if (AppDataSource.isInitialized) {
+        try {
+          await AppDataSource.destroy();
+        } catch (_) {
+          // Ignore destroy errors
+        }
+      }
+
       if (attempt === maxRetries) {
-        console.error("💥 All database connection attempts failed");
+        console.error("All database connection attempts failed");
         process.exit(1);
       }
 
-      console.log(`⏳ Retrying in ${retryDelay / 1000} seconds...`);
+      console.log(`Retrying in ${retryDelay / 1000} seconds...`);
       await new Promise((resolve) => setTimeout(resolve, retryDelay));
     }
   }
